@@ -1,0 +1,256 @@
+<html>
+  <style>
+    body {
+        font-family: 'Nunito', sans-serif;
+        color: #384047;
+      }
+      
+      form {
+        max-width: 500px;
+        margin: 10px auto;
+        padding: 10px 20px;
+        background: #f4f7f8;
+        border-radius: 8px;
+      }
+
+      #now{
+     
+        max-width: 500px;
+        margin: 10px auto;
+        padding: 10px 20px;
+        background: #f4f7f8;
+        border-radius: 8px;
+      }
+      .My_CSS {
+    opacity: 0; 
+    border: none;
+    border-radius: 3px;
+    background: grey;
+    position: absolute;
+    left: 0px;    
+    width: 100%;
+    top: 0px;
+    height: 100%;
+}
+</style>
+    <script>
+
+
+
+function addFields(number){
+    // Number of inputs to create
+    // Container <div> where dynamic content will be placed
+    var container = document.getElementById("stylewt");
+    // Clear previous contents of the container
+    while (container.hasChildNodes()) {
+        container.removeChild(container.lastChild);
+    }
+    container.appendChild(document.createTextNode("Enter Style numbers and their corresponding weights"));
+    container.appendChild(document.createElement("br"));
+    for (i=0;i<number;i++){
+        // Append a node with a random text
+        container.appendChild(document.createTextNode("Area " + (i+1)+":"));
+        // Create an <input> element, set its type and name attributes
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = "style";
+        input.id="style" + (i+1);
+        input.value='';
+        container.appendChild(input);
+        var input1 = document.createElement("input");
+        input1.type = "";
+        input1.name = "weight";
+        input1.value='';
+        container.appendChild(input1);
+        container.appendChild(document.createElement("br"));
+    }    
+}
+
+
+
+function addFields1(number){
+    // Number of inputs to create
+    // Container <div> where dynamic content will be placed
+    var container = document.getElementById("stylewt");
+    // Clear previous contents of the container
+    while (container.hasChildNodes()) {
+        container.removeChild(container.lastChild);
+    }
+    container.appendChild(document.createTextNode("Enter areas for each style"));
+    container.appendChild(document.createElement("br"));
+    for (i=0;i<number;i++){
+        // Append a node with a random text
+        container.appendChild(document.createTextNode("Style " + (i+1)));
+        // Create an <input> element, set its type and name attributes
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = "area";
+        input.id="area" + (i+1);
+        input.value='';
+        container.appendChild(input);
+        container.appendChild(document.createElement("br"));
+    }    
+}
+
+
+function one(){
+
+  jQuery.ajax({
+    type: "GET",
+    url: '/areas',
+    contentType: 'json',
+    processData: false,
+    success: function(response){
+      var number=response["number"];
+      console.log(response);
+      addFields(number);
+    },
+    error: function(response){
+     console.log(response);
+     alert(response);
+    }
+  });
+}
+
+function two(){
+  jQuery.ajax({
+    type: "GET",
+    url: '/styles',
+    contentType: 'json',
+    processData: false,
+    success: function(response){
+      var number=response["number"];
+      console.log(response);
+      addFields1(number);
+    },
+    error: function(response){
+     console.log(response);
+     alert(response);
+    }
+  });
+}
+
+      function enableText(){
+        var x=document.getElementById("msmode").value;
+        if(x=="1")
+       {
+        one();
+       }
+        else if(x=="2")
+        {
+          two();
+        }
+        else{
+          var container = document.getElementById("stylewt");
+          // Clear previous contents of the container
+          while (container.hasChildNodes()) {
+              container.removeChild(container.lastChild);
+          }
+        }
+      }
+
+function submit(){
+  console.log("hi hello");
+  var data={};
+  data["mode"]=document.getElementById("msmode").value;
+  var x=[];
+  if(data["mode"]=="1")
+  {
+    var y=document.getElementsByName("style");
+    var y1=document.getElementsByName("weight");
+    for(var i=0;i<y.length;i++){
+      x.push([y[i].value,y1[i].value]);
+    }
+    data["blend"]=x;
+  }
+  else{
+    var y=document.getElementsByName("area");
+    for(var i=0;i<y.length;i++){
+      x.push(y[i].value);
+    }
+    data["mix"]=x;
+  }
+
+  data["color"]=document.getElementById("exampleSelect2").value;
+  data["stylescale"]=document.getElementById("stylescale").value;
+  console.log(data);
+
+  jQuery.ajax({
+    type: "POST",
+    url: '/getresult',
+    data: JSON.stringify(data),
+    contentType: 'json',
+    processData: false,
+    success: function(response){
+      document.getElementById("result").style.display = 'block';
+      console.log(response);
+      var x = response["number"].replace(/\\n/g, "");
+      var p = x.substr(2, x.length - 3);
+      console.log(p);
+      document.getElementById("result").src="data:image/png;base64,"+p;
+    },
+    error: function(response){
+     console.log(response);
+     alert(response);
+    }
+  });
+
+
+
+
+}
+function clear1(){
+  console.log('clear');
+  document.getElementById("result").style.display = 'none';
+  document.getElementById("exampleSelect2").value="0";
+  document.getElementById("msmode").value="0";
+  document.getElementById("stylescale").value="";
+}
+
+    </script>
+    <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cerulean/bootstrap.min.css" integrity="sha384-3fdgwJw17Bi87e1QQ4fsLn4rUFqWw//KU0g8TvV6quvahISRewev6/EocKNuJmEw" crossorigin="anonymous">
+        <script type='text/javascript'>
+      </script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <h1>Style Transfer</h1>
+            </div>
+          </nav>
+          <div id="now">
+          <a href="/draw" target="_blank"><button type="button" class="btn btn-primary">Content image upload</button></a>
+          <a href="/colorchange" target="_blank"><button type="button" class="btn btn-primary">Style image(s) upload</button></a>
+         
+            <div>
+              <label for="fname">Style scale</label>
+              <input type="text" id="stylescale" name="fname">
+            </div>
+              <div >
+                <label for="exampleSelect1">Select Mode of Multiple Style transfer</label>
+                <select class="form-select" id="msmode" onchange="enableText()">
+                  <option value="0">Select</option>
+                  <option value="1">Blend and Mix</option>
+                  <option value="2" hidden>2-Mixed</option>
+                </select>
+              </div>
+              <div  id="stylewt">
+              </div>
+              <div >
+                <label for="exampleSelect2">Select Color Preservation(Yes(1)/No(0))</label>
+                <select  class="form-select" id="exampleSelect2">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                </select>
+              </div>
+              <button type="button" class="btn btn-primary" onclick="submit()">SubmitAll</button>
+              <button type="button" class="btn btn-primary" onclick="clear1()">Clear</button>
+              <img id="result" style="display:none"></img>
+            </div>
+           
+
+    </body>
+</html>
+

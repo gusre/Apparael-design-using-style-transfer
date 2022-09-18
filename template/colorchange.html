@@ -1,0 +1,114 @@
+<html>
+
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+        color: #384047;
+      }
+      
+      .now {
+        max-width: 500px;
+        margin: 100px auto;
+        padding: 10px 20px;
+        background: #f4f7f8;
+        border-radius: 8px;
+      }
+      .modal-dialog{
+    position: relative;
+    display: table; /* This is important */ 
+    overflow-y: auto;    
+    overflow-x: auto;
+    width: auto;
+    min-width: 300px;   
+    padding-left: 30px;
+}
+.My_CSS {
+    opacity: 0; 
+    border: none;
+    border-radius: 3px;
+    background: grey;
+    position: absolute;
+    left: 0px;    
+    width: 100%;
+    top: 0px;
+    height: 100%;
+}
+#left{
+  display: flex;
+  justify-content:center;
+}
+#left2{
+  text-align: center;
+}
+</style>
+    
+
+
+    <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <!--<script type="text/javascript" src="../static/js/colorpalette.js"></script>  -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+     <script type="text/javascript" src="{{ url_for('static', filename='js/colorpalette.js') }}"></script> 
+        <script type='text/javascript'>
+
+      </script>
+     
+
+
+    </head>
+    <body>
+          <div class="now" class="model-dialog" >
+            <fieldset>
+    
+              <div class="form-group">
+                <label for="exampleInputEmail1">Number of styles</label><br/>
+                <input type="number" class="form-control-sm" id="numStyles" aria-describedby="emailHelp" placeholder="Enter number of styles">
+                <button type="button" class="btn btn-primary" onclick="addFields()">Style images upload</button>
+              </div>
+
+              <div class="form-group" id="addField">
+                
+              </div>
+              <button type="button" class="btn btn-primary" onclick="submitStyle()" id="Submitall" style="display:none;">Submit All</button>
+            </fieldset>
+        </div>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel"></h4>
+              </div>
+              <div class="modal-body">
+              </div>
+              <div id="left">
+              <canvas
+                id="canvas"
+                width="500"
+                height="200"
+                style="border: 1px solid black;"
+              ></canvas>
+          
+            <img id="result1" style="display:none"></img>
+          </div>
+          <div id="left2">
+            <label for="exampleInputEmail1">Enter number of colors</label><br/>
+            <input type="text" id="numColors">
+            <button type="button" class="btn btn-primary" onclick="setColorPickers()">Enter</button>
+            <div class="now">
+                <div id="numStyles" ></div>
+                <div id="ColorPick"></div>
+            </div>
+          </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </body>
+    </html>
